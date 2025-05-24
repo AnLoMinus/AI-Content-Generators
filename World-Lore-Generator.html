@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 מחולל סיפור / עולם / lore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            direction: rtl;
+            background: linear-gradient(135deg, #f4f4f9 0%, #e8e8f0 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+        }
+
+        .prompt-box {
+            white-space: pre-line;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #4a90e2;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .tooltip-icon {
+            color: #4a90e2;
+            margin-right: 5px;
+            cursor: help;
+        }
+
+        .world-element {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .world-element:hover {
+            border-color: #4a90e2;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-home"></i> חזרה לדף הבית
+            </a>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h1 class="text-center mb-4">🔮 מחולל סיפור / עולם / lore</h1>
+        <p class="text-center text-muted mb-5">בנה עולם מיסטי מקושר, עם חוקים פנימיים, דמויות, קלפים, ושערים</p>
+
+        <form id="worldForm" class="row g-3">
+            <!-- פרטי בסיס של העולם -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-globe"></i>
+                    פרטי בסיס של העולם
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-crown tooltip-icon" title="שם העולם או הסיפור"></i>
+                            שם העולם
+                        </label>
+                        <input type="text" class="form-control" id="worldName" placeholder="לדוגמה: עולם השבעים שערים">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-layer-group tooltip-icon" title="התחום או הנושא המרכזי"></i>
+                            תחום מרכזי
+                        </label>
+                        <select class="form-select" id="mainDomain">
+                            <option>חכמה קבלית</option>
+                            <option>מיסטיקה יהודית</option>
+                            <option>תורת הנסתר</option>
+                            <option>מסע רוחני</option>
+                            <option>שערי תודעה</option>
+                            <option>עולמות עליונים</option>
+                            <option>סוד הבריאה</option>
+                            <option>דרך הנשמה</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- חוקים ומבנה -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-gavel"></i>
+                    חוקים ומבנה
+                </h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-book tooltip-icon" title="החוקים הבסיסיים של העולם"></i>
+                            חוקי יסוד
+                        </label>
+                        <textarea class="form-control" id="worldRules" rows="3"
+                            placeholder="תאר את החוקים הבסיסיים של העולם, המבנה שלו, והעקרונות המנחים"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-sitemap tooltip-icon" title="מבנה העולם והשכבות שלו"></i>
+                            מבנה העולם
+                        </label>
+                        <select class="form-select" id="worldStructure">
+                            <option>שבעה עולמות</option>
+                            <option>עשר ספירות</option>
+                            <option>שבעים שערים</option>
+                            <option>חמישה חלקים</option>
+                            <option>שלוש שכבות</option>
+                            <option>מעגלים קונצנטריים</option>
+                            <option>פירמידה רוחנית</option>
+                            <option>עץ החיים</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-balance-scale tooltip-icon" title="כוחות מרכזיים בעולם"></i>
+                            כוחות מרכזיים
+                        </label>
+                        <select class="form-select" id="mainForces">
+                            <option>אור וחושך</option>
+                            <option>חסד ודין</option>
+                            <option>חכמה ובינה</option>
+                            <option>אמת ושקר</option>
+                            <option>קודש וחול</option>
+                            <option>רוח וחומר</option>
+                            <option>עליון ותחתון</option>
+                            <option>נצח ושינוי</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- דמויות מרכזיות -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-users"></i>
+                    דמויות מרכזיות
+                </h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-user-crown tooltip-icon" title="הדמויות המרכזיות בעולם"></i>
+                            דמויות מפתח
+                        </label>
+                        <textarea class="form-control" id="keyCharacters" rows="3"
+                            placeholder="תאר את הדמויות המרכזיות, תפקידיהן, ומערכות היחסים ביניהן"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-user-shield tooltip-icon" title="שומרי הסוד או המגינים"></i>
+                            שומרי הסוד
+                        </label>
+                        <input type="text" class="form-control" id="guardians"
+                            placeholder="לדוגמה: שבעים הזקנים, שומרי השערים">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-user-graduate tooltip-icon" title="המורים או המדריכים"></i>
+                            מורים ומדריכים
+                        </label>
+                        <input type="text" class="form-control" id="teachers"
+                            placeholder="לדוגמה: חכמי הדור, מלאכי השרת">
+                    </div>
+                </div>
+            </div>
+
+            <!-- שערים וקלפים -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-door-open"></i>
+                    שערים וקלפים
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-door-closed tooltip-icon" title="השערים או השלבים בעולם"></i>
+                            שערים מרכזיים
+                        </label>
+                        <select class="form-select" id="mainGates">
+                            <option>שבעים שערים</option>
+                            <option>עשר ספירות</option>
+                            <option>שבעה שערים</option>
+                            <option>חמישה שערים</option>
+                            <option>שלושה שערים</option>
+                            <option>שער אחד מרכזי</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-cards tooltip-icon" title="סדרות הקלפים בעולם"></i>
+                            סדרות קלפים
+                        </label>
+                        <select class="form-select" id="cardSeries">
+                            <option>קלפי השערים</option>
+                            <option>קלפי הספירות</option>
+                            <option>קלפי הדמויות</option>
+                            <option>קלפי החכמה</option>
+                            <option>קלפי המסע</option>
+                            <option>קלפי הכוחות</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-map tooltip-icon" title="מפת העולם או המסע"></i>
+                            מפת העולם
+                        </label>
+                        <textarea class="form-control" id="worldMap" rows="3"
+                            placeholder="תאר את המבנה הגיאוגרפי או הרוחני של העולם"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- רקע לסצנות -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-theater-masks"></i>
+                    רקע לסצנות
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-palette tooltip-icon" title="האווירה הכללית"></i>
+                            אווירה כללית
+                        </label>
+                        <select class="form-select" id="atmosphere">
+                            <option>מיסטית ומסתורית</option>
+                            <option>רוחנית ועמוקה</option>
+                            <option>קסומה ומופלאה</option>
+                            <option>חכמה ועמוקה</option>
+                            <option>מלכותית ונשגבת</option>
+                            <option>פנימית ומתעוררת</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-music tooltip-icon" title="הצליל או המוזיקה"></i>
+                            צליל ומוזיקה
+                        </label>
+                        <select class="form-select" id="soundscape">
+                            <option>שקט מיסטי</option>
+                            <option>צלילי טבע</option>
+                            <option>מוזיקה קבלית</option>
+                            <option>קולות רוח</option>
+                            <option>צלילי נבואה</option>
+                            <option>מוזיקת מלאכים</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-paint-brush tooltip-icon" title="תיאור חזותי"></i>
+                            תיאור חזותי
+                        </label>
+                        <textarea class="form-control" id="visualDescription" rows="3"
+                            placeholder="תאר את המראה הכללי, הצבעים, האווירה החזותית"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 text-center mt-4">
+                <button type="button" class="btn btn-primary px-5" onclick="generateWorldLore()">
+                    <i class="fas fa-magic"></i> צור עולם
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-5">
+            <h4 class="text-center mb-4">
+                <i class="fas fa-scroll"></i>
+                עולם שנוצר
+            </h4>
+            <div id="worldLore" class="prompt-box"></div>
+            <div class="text-center mt-3">
+                <button class="btn btn-outline-success" onclick="copyWorldLore()">
+                    <i class="fas fa-copy"></i> העתק תוכן
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateWorldLore() {
+            const name = document.getElementById('worldName').value;
+            const domain = document.getElementById('mainDomain').value;
+            const rules = document.getElementById('worldRules').value;
+            const structure = document.getElementById('worldStructure').value;
+            const forces = document.getElementById('mainForces').value;
+            const characters = document.getElementById('keyCharacters').value;
+            const guardians = document.getElementById('guardians').value;
+            const teachers = document.getElementById('teachers').value;
+            const gates = document.getElementById('mainGates').value;
+            const cards = document.getElementById('cardSeries').value;
+            const map = document.getElementById('worldMap').value;
+            const atmosphere = document.getElementById('atmosphere').value;
+            const sound = document.getElementById('soundscape').value;
+            const visual = document.getElementById('visualDescription').value;
+
+            const result = `🔮 World: ${name}
+🌍 Domain: ${domain}
+
+📜 Rules & Structure:
+   - Basic Rules: ${rules}
+   - World Structure: ${structure}
+   - Main Forces: ${forces}
+
+👥 Characters:
+   - Key Characters: ${characters}
+   - Guardians: ${guardians}
+   - Teachers: ${teachers}
+
+🚪 Gates & Cards:
+   - Main Gates: ${gates}
+   - Card Series: ${cards}
+   - World Map: ${map}
+
+🎭 Atmosphere:
+   - General Mood: ${atmosphere}
+   - Soundscape: ${sound}
+   - Visual Description: ${visual}`;
+
+            document.getElementById('worldLore').innerText = result;
+        }
+
+        function copyWorldLore() {
+            const text = document.getElementById('worldLore').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✅ התוכן הועתק בהצלחה!");
+            });
+        }
+
+        // הוספת טולטיפים
+        const tooltips = document.querySelectorAll('.tooltip-icon');
+        tooltips.forEach(tooltip => {
+            tooltip.addEventListener('mouseover', function () {
+                const title = this.getAttribute('title');
+                const tooltipEl = document.createElement('div');
+                tooltipEl.className = 'tooltip';
+                tooltipEl.textContent = title;
+                document.body.appendChild(tooltipEl);
+
+                const rect = this.getBoundingClientRect();
+                tooltipEl.style.top = rect.top - tooltipEl.offsetHeight - 5 + 'px';
+                tooltipEl.style.left = rect.left + (rect.width / 2) - (tooltipEl.offsetWidth / 2) + 'px';
+            });
+
+            tooltip.addEventListener('mouseout', function () {
+                const tooltips = document.querySelectorAll('.tooltip');
+                tooltips.forEach(t => t.remove());
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,219 @@
+<!-- שדרוג עם תתי-טאבים לחלקים מתקדמים -->
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎴 מחולל פרומפטים לקלפים</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            direction: rtl;
+            background-color: #f9f9fb;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .prompt-box {
+            white-space: pre-line;
+            background-color: #fff;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="container py-5">
+    <h1 class="text-center mb-4">🎴 מחולל פרומפטים לעיצוב קלפים</h1>
+
+    <!-- כרטיסיות תתי טאבים -->
+    <ul class="nav nav-tabs mb-4" id="tabMenu" role="tablist">
+        <li class="nav-item"><button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic"
+                type="button">🧾 בסיסי</button></li>
+        <li class="nav-item"><button class="nav-link" id="graphic-tab" data-bs-toggle="tab" data-bs-target="#graphic"
+                type="button">🎨 עיצוב</button></li>
+        <li class="nav-item"><button class="nav-link" id="game-tab" data-bs-toggle="tab" data-bs-target="#game"
+                type="button">🎮 מאפייני משחק</button></li>
+        <li class="nav-item"><button class="nav-link" id="meta-tab" data-bs-toggle="tab" data-bs-target="#meta"
+                type="button">📂 מטא נתונים</button></li>
+    </ul>
+
+    <form id="cardForm" class="tab-content row g-3">
+        <!-- טאב בסיסי -->
+        <div class="tab-pane fade show active" id="basic">
+            <div class="row">
+                <div class="col-md-6"><label class="form-label">שם הקלף</label><input type="text" class="form-control"
+                        id="cardName"></div>
+                <div class="col-md-3"><label class="form-label">מספר סידורי</label><input type="number"
+                        class="form-control" id="serialNumber"></div>
+                <div class="col-md-3"><label class="form-label">סוג קלף</label><select class="form-select"
+                        id="cardType">
+                        <option>התקפה</option>
+                        <option>הגנה</option>
+                        <option>תמיכה</option>
+                        <option>מיוחד</option>
+                        <option>קמע</option>
+                        <option>קלף חיזוק</option>
+                        <option>קלף קללה</option>
+                        <option>קלף מזל</option>
+                    </select></div>
+                <div class="col-md-4"><label class="form-label">רמת נדירות 🎭</label><select class="form-select"
+                        id="rarity">
+                        <option>רגיל</option>
+                        <option>נדיר</option>
+                        <option>אולטרה</option>
+                        <option>אגדי</option>
+                        <option>ייחודי במהדורה מוגבלת</option>
+                    </select></div>
+                <div class="col-md-8"><label class="form-label">תיאור / יכולת הקלף</label><textarea class="form-control"
+                        id="cardDescription" rows="3"></textarea></div>
+            </div>
+        </div>
+
+        <!-- טאב גרפי -->
+        <div class="tab-pane fade" id="graphic">
+            <div class="row">
+                <div class="col-md-4"><label class="form-label">אפקטים חזותיים 🔥</label><select class="form-select"
+                        id="visualEffects">
+                        <option>ללא</option>
+                        <option>ברק זוהר</option>
+                        <option>להבות קוסמיות</option>
+                        <option>הילת אור</option>
+                        <option>אבקת קסם</option>
+                        <option>קווים מתפזרים</option>
+                    </select></div>
+                <div class="col-md-4"><label class="form-label">סגנון מסגרת</label><select class="form-select"
+                        id="frameStyle">
+                        <option>זהב עתיק</option>
+                        <option>הולוגרפי</option>
+                        <option>פשוט ונקי</option>
+                        <option>זוהר קוסמי</option>
+                        <option>עץ מגולף</option>
+                        <option>מסגרת קריסטלית</option>
+                        <option>קווים דינמיים</option>
+                        <option>עננים מסתובבים</option>
+                    </select></div>
+                <div class="col-md-4"><label class="form-label">צבע רקע</label><input type="text" class="form-control"
+                        id="backgroundColor"></div>
+                <div class="col-md-6"><label class="form-label">סמל אישי / איקון</label><input type="text"
+                        class="form-control" id="icon"></div>
+                <div class="col-md-6"><label class="form-label">גודל פיזי</label><select class="form-select"
+                        id="cardSize">
+                        <option>63x88 מ"מ (קלף סטנדרטי)</option>
+                        <option>70x120 מ"מ (קלף טארוט)</option>
+                        <option>59x92 מ"מ (אירופאי)</option>
+                        <option>80x120 מ"מ (פרימיום)</option>
+                        <option>100x150 מ"מ (ענק)</option>
+                    </select></div>
+            </div>
+        </div>
+
+        <!-- טאב משחקי -->
+        <div class="tab-pane fade" id="game">
+            <div class="row">
+                <div class="col-md-6"><label class="form-label">תוויות / קטגוריות</label><input type="text"
+                        class="form-control" id="tags"></div>
+                <div class="col-md-6"><label class="form-label">עלות שימוש (לדוגמה: 3 אנרגיה)</label><input type="text"
+                        class="form-control" id="cost"></div>
+                <div class="col-md-4"><label class="form-label">סוג פעולה</label><select class="form-select"
+                        id="actionType">
+                        <option>פסיבי</option>
+                        <option>אקטיבי</option>
+                        <option>לפי תנאי</option>
+                    </select></div>
+                <div class="col-md-4"><label class="form-label">תוקף הקלף</label><select class="form-select"
+                        id="duration">
+                        <option>חד־פעמי</option>
+                        <option>תמידי</option>
+                        <option>עד סוף תור</option>
+                    </select></div>
+                <div class="col-md-4"><label class="form-label">רמת מורכבות</label><select class="form-select"
+                        id="complexity">
+                        <option>בסיסי</option>
+                        <option>מתקדם</option>
+                        <option>מורכב במיוחד</option>
+                    </select></div>
+            </div>
+        </div>
+
+        <!-- טאב מטא נתונים -->
+        <div class="tab-pane fade" id="meta">
+            <div class="row">
+                <div class="col-md-6"><label class="form-label">שם הסדרה / חפיסה</label><input type="text"
+                        class="form-control" id="series"></div>
+                <div class="col-md-6"><label class="form-label">גרסה / מהדורה</label><input type="text"
+                        class="form-control" id="edition"></div>
+                <div class="col-md-12"><label class="form-label">קלפים מקושרים (ID)</label><input type="text"
+                        class="form-control" id="linkedCards" placeholder="001, 013, 017"></div>
+            </div>
+        </div>
+
+        <div class="col-12 text-center mt-4">
+            <button type="button" class="btn btn-primary px-5" onclick="generateCardPrompt()">⚡ צור פרומפט</button>
+        </div>
+    </form>
+
+    <div class="mt-5">
+        <h4 class="text-center">🧾 פרומפט לקלף</h4>
+        <div id="cardPrompt" class="prompt-box"></div>
+        <div class="text-center mt-2">
+            <button class="btn btn-outline-success" onclick="copyCardPrompt()">
+                <i class="fa-solid fa-copy"></i> העתק פרומפט
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function generateCardPrompt() {
+            const name = document.getElementById('cardName')?.value;
+            const number = document.getElementById('serialNumber')?.value;
+            const type = document.getElementById('cardType')?.value;
+            const rarity = document.getElementById('rarity')?.value;
+            const desc = document.getElementById('cardDescription')?.value;
+            const effects = document.getElementById('visualEffects')?.value;
+            const frame = document.getElementById('frameStyle')?.value;
+            const bg = document.getElementById('backgroundColor')?.value;
+            const icon = document.getElementById('icon')?.value;
+            const size = document.getElementById('cardSize')?.value;
+            const tags = document.getElementById('tags')?.value;
+            const cost = document.getElementById('cost')?.value;
+            const actionType = document.getElementById('actionType')?.value;
+            const duration = document.getElementById('duration')?.value;
+            const complexity = document.getElementById('complexity')?.value;
+            const series = document.getElementById('series')?.value;
+            const edition = document.getElementById('edition')?.value;
+            const linked = document.getElementById('linkedCards')?.value;
+
+            const prompt = `🎴 Name: ${name}
+#️⃣ Serial: ${number}
+🃏 Type: ${type}
+🎭 Rarity: ${rarity}
+📄 Description: ${desc}
+🔥 Visual: ${effects}
+🎨 Frame: ${frame}, BG: ${bg}, Icon: ${icon}
+📐 Size: ${size}
+🏷 Tags: ${tags}
+💰 Cost: ${cost}
+🎯 Action: ${actionType}, Duration: ${duration}, Complexity: ${complexity}
+📦 Series: ${series}, Edition: ${edition}
+🔗 Linked: ${linked}`;
+
+            document.getElementById('cardPrompt').innerText = prompt;
+        }
+
+        function copyCardPrompt() {
+            const text = document.getElementById('cardPrompt').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✨ הפרומפט הועתק בהצלחה!");
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

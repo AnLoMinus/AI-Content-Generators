@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 מחולל פרומפטים לעיצוב תמונות</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f4f4f9 0%, #e8e8f0 100%);
+            direction: rtl;
+            text-align: right;
+            min-height: 100vh;
+        }
+
+        .prompt-box {
+            white-space: pre-line;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .prompt-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .form-select,
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus,
+        .form-control:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+        }
+
+        .btn {
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .form-check {
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .form-check:hover {
+            transform: translateX(-5px);
+        }
+
+        .form-check-input:checked {
+            background-color: #4a90e2;
+            border-color: #4a90e2;
+        }
+
+        .tooltip-icon {
+            color: #4a90e2;
+            margin-right: 5px;
+            cursor: help;
+        }
+
+        .saved-prompts {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .saved-prompt-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .saved-prompt-item:hover {
+            background: rgba(74, 144, 226, 0.1);
+        }
+
+        .loading-spinner {
+            display: none;
+            margin-left: 10px;
+        }
+
+        .category-badge {
+            background: #e8e8f0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            color: #2c3e50;
+        }
+
+        .ai-suggestions {
+            background: rgba(74, 144, 226, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .progress-section {
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+        }
+    </style>
+</head>
+
+<body class="container py-5">
+    <h1 class="text-center mb-4 animate__animated animate__fadeInDown">🎨 מחולל פרומפטים לעיצוב תמונות</h1>
+
+    <!-- הוספת תפריט ניווט -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded mb-4">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#main-form">יצירת פרומפט</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#saved-prompts">פרומפטים שמורים</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ai-suggestions">המלצות AI</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <form id="promptForm" class="row g-3">
+        <!-- הוספת סקשן התקדמות -->
+        <div class="col-12 progress-section">
+            <div class="d-flex justify-content-between mb-2">
+                <span>התקדמות יצירת הפרומפט</span>
+                <span id="progress-percentage">0%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- סקשן נושא וסגנון -->
+        <div class="col-12 form-section">
+            <h4 class="mb-3">🎯 נושא וסגנון</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">
+                        נושא מרכזי
+                        <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip"
+                            title="בחר נושא מרכזי לתמונה"></i>
+                    </label>
+                    <select class="form-select" id="mainSubject">
+                        <option selected disabled>בחר נושא</option>
+                        <option>דמות גיבור על</option>
+                        <option>עיר עתידנית</option>
+                        <option>חיית פנטזיה</option>
+                        <option>עץ החיים</option>
+                        <option>שער מיסטי</option>
+                        <option>חלל קוסמי</option>
+                        <option>מקדש עתיק</option>
+                        <option>שומר שערים</option>
+                        <option>חדר מסתורין</option>
+                        <option>ארמון קריסטלי</option>
+                        <option>זירת קרב אפית</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        סטייל עיצוב
+                        <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip"
+                            title="בחר סגנון עיצובי לתמונה"></i>
+                    </label>
+                    <select class="form-select" id="style">
+                        <option selected disabled>בחר סטייל</option>
+                        <option>ריאליסטי</option>
+                        <option>אנימה</option>
+                        <option>הולוגרפי</option>
+                        <option>סייברפאנק</option>
+                        <option>רטרו פיקסל</option>
+                        <option>פנטזיה אפלה</option>
+                        <option>תלת ממד פוטוריסטי</option>
+                        <option>ציור שמן</option>
+                        <option>סקיצה בעיפרון</option>
+                        <option>סגנון מנגה</option>
+                        <option>קליגרפיה מופשטת</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- סקשן צבעים ורקעים -->
+        <div class="col-12 form-section">
+            <h4 class="mb-3">🎨 צבעים ורקעים</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">צבעים דומיננטיים</label>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="כחול"
+                            id="color1"><label class="form-check-label" for="color1">כחול</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="זהב"
+                            id="color2"><label class="form-check-label" for="color2">זהב</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="טורקיז"
+                            id="color3"><label class="form-check-label" for="color3">טורקיז</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="שחור"
+                            id="color4"><label class="form-check-label" for="color4">שחור</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="סגול"
+                            id="color5"><label class="form-check-label" for="color5">סגול</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="אדום לוהט"
+                            id="color6"><label class="form-check-label" for="color6">אדום לוהט</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="כסף מתכתי"
+                            id="color7"><label class="form-check-label" for="color7">כסף מתכתי</label></div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">רקעים</label>
+                    <select class="form-select" id="background">
+                        <option selected disabled>בחר רקע</option>
+                        <option>רקע קוסמי</option>
+                        <option>ערפל סגול</option>
+                        <option>עיר עתידנית בלילה</option>
+                        <option>שדה אור</option>
+                        <option>יערות מסתוריים</option>
+                        <option>שמים בוערים</option>
+                        <option>מעמקי הים</option>
+                        <option>אולימפוס שמימי</option>
+                        <option>חלל בין־ממדי</option>
+                        <option>שדה קרב גלקטי</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">אפקטים מיוחדים</label>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="ברקים"
+                            id="effect1"><label class="form-check-label" for="effect1">⚡ ברקים</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="ניצוצות"
+                            id="effect2"><label class="form-check-label" for="effect2">✨ ניצוצות</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="הילה"
+                            id="effect3"><label class="form-check-label" for="effect3">🌟 הילה</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="ערפל נע"
+                            id="effect4"><label class="form-check-label" for="effect4">🌫 ערפל נע</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="שבירת אור"
+                            id="effect5"><label class="form-check-label" for="effect5">🌈 שבירת אור</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="קרני שמש אלוהיות"
+                            id="effect6"><label class="form-check-label" for="effect6">☀ קרני שמש אלוהיות</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="קריסטלים זוהרים"
+                            id="effect7"><label class="form-check-label" for="effect7">💎 קריסטלים זוהרים</label></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- סקשן טכני -->
+        <div class="col-12 form-section">
+            <h4 class="mb-3">⚙️ הגדרות טכניות</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">סוג תאורה 💡</label>
+                    <select class="form-select" id="lighting">
+                        <option selected disabled>בחר תאורה</option>
+                        <option>רכה</option>
+                        <option>קונטרסטית</option>
+                        <option>דרמטית</option>
+                        <option>אחורית</option>
+                        <option>פיזור אור טבעי</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">זווית צילום 📸</label>
+                    <select class="form-select" id="angle">
+                        <option selected disabled>בחר זווית</option>
+                        <option>מבט על</option>
+                        <option>מבט חזיתי</option>
+                        <option>פרופיל</option>
+                        <option>אלכסון תחתון</option>
+                        <option>מתוך סצנה</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">קומפוזיציה 🧩</label>
+                    <select class="form-select" id="composition">
+                        <option selected disabled>בחר קומפוזיציה</option>
+                        <option>מרכזי</option>
+                        <option>סימטרי</option>
+                        <option>פריים בתוך פריים</option>
+                        <option>חיתוך זהב</option>
+                        <option>שליש תחתון</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">גודל תמונה (בס"מ או פיקסלים)</label>
+                    <input type="text" class="form-control" id="dimensions"
+                        placeholder="לדוגמה: 1920x1080 פיקסלים או 20x30 ס" מ">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">יחס תמונה + איכות</label>
+                    <select class="form-select" id="ratio">
+                        <option selected disabled>בחר יחס</option>
+                        <option>16:9 – רוחבי</option>
+                        <option>4:5 – אנכי לאינסטגרם</option>
+                        <option>1:1 – ריבוע</option>
+                        <option>2:3 – אמנות קלאסית</option>
+                        <option>Ultra HD (8K)</option>
+                        <option>Web Optimized (Fast Load)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">תיאור נוסף</label>
+            <textarea class="form-control" id="extraDesc" rows="2" placeholder="הוספת פרטים נוספים..."></textarea>
+        </div>
+
+        <div class="col-12 text-center">
+            <button type="button" class="btn btn-primary px-5 mt-3" onclick="generatePrompt()">
+                ⚡ צור פרומפט
+                <span class="spinner-border spinner-border-sm loading-spinner" role="status" aria-hidden="true"></span>
+            </button>
+        </div>
+    </form>
+
+    <!-- סקשן פרומפט שנוצר -->
+    <div class="mt-5 animate__animated animate__fadeInUp">
+        <h4 class="text-center">🔹 פרומפט שנוצר</h4>
+        <div class="alert alert-light border prompt-box" id="resultPrompt"></div>
+        <div class="text-center">
+            <button class="btn btn-outline-success me-2" onclick="copyPrompt()">
+                <i class="fa-solid fa-copy"></i> העתק פרומפט
+            </button>
+            <button class="btn btn-outline-primary" onclick="savePrompt()">
+                <i class="fa-solid fa-bookmark"></i> שמור פרומפט
+            </button>
+        </div>
+    </div>
+
+    <!-- סקשן פרומפטים שמורים -->
+    <div id="saved-prompts" class="mt-5">
+        <h4 class="text-center mb-4">📚 פרומפטים שמורים</h4>
+        <div class="saved-prompts" id="savedPromptsList"></div>
+    </div>
+
+    <!-- סקשן המלצות AI -->
+    <div id="ai-suggestions" class="mt-5 ai-suggestions">
+        <h4 class="text-center mb-4">🤖 המלצות AI</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">🎨 שילובי צבעים מומלצים</h5>
+                        <p class="card-text">כחול + זהב: יצירת ניגודיות מלכותית</p>
+                        <p class="card-text">סגול + טורקיז: אווירה מיסטית</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">📸 זוויות צילום אופטימליות</h5>
+                        <p class="card-text">מבט על: מושלם לנופים עירוניים</p>
+                        <p class="card-text">פרופיל: אידיאלי לדמויות</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">💡 טיפים מקצועיים</h5>
+                        <p class="card-text">הוסף תאורה דרמטית לסצנות אפיות</p>
+                        <p class="card-text">שתמש בקומפוזיציה סימטרית לתמונות מאוזנות</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // אתחול טולטיפים
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        // פונקציות עזר
+        function getCheckedValues(selector) {
+            return Array.from(document.querySelectorAll(selector))
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value)
+                .join(", ");
+        }
+
+        function updateProgress() {
+            const totalFields = 10; // מספר השדות הכולל
+            let filledFields = 0;
+
+            // בדיקת שדות חובה
+            if (document.getElementById('mainSubject').value) filledFields++;
+            if (document.getElementById('style').value) filledFields++;
+            if (getCheckedValues('input[id^="color"]')) filledFields++;
+            if (document.getElementById('background').value) filledFields++;
+            if (getCheckedValues('input[id^="effect"]')) filledFields++;
+            if (document.getElementById('lighting').value) filledFields++;
+            if (document.getElementById('angle').value) filledFields++;
+            if (document.getElementById('composition').value) filledFields++;
+            if (document.getElementById('dimensions').value) filledFields++;
+            if (document.getElementById('ratio').value) filledFields++;
+
+            const progress = (filledFields / totalFields) * 100;
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percentage').textContent = `${Math.round(progress)}%`;
+        }
+
+        // הוספת מאזיני אירועים לשדות
+        document.querySelectorAll('select, input, textarea').forEach(element => {
+            element.addEventListener('change', updateProgress);
+            element.addEventListener('input', updateProgress);
+        });
+
+        function generatePrompt() {
+            const spinner = document.querySelector('.loading-spinner');
+            spinner.style.display = 'inline-block';
+
+            setTimeout(() => {
+                const subject = document.getElementById('mainSubject')?.value;
+                const style = document.getElementById('style')?.value;
+                const colors = getCheckedValues('input[id^="color"]');
+                const background = document.getElementById('background')?.value;
+                const effects = getCheckedValues('input[id^="effect"]');
+                const lighting = document.getElementById('lighting')?.value;
+                const angle = document.getElementById('angle')?.value;
+                const composition = document.getElementById('composition')?.value;
+                const dimensions = document.getElementById('dimensions')?.value;
+                const ratio = document.getElementById('ratio')?.value;
+                const extra = document.getElementById('extraDesc')?.value;
+
+                const result = `🎨 נושא: ${subject}
+🎭 סגנון: ${style}
+🎨 צבעים: ${colors}
+🌌 רקע: ${background}
+✨ אפקטים: ${effects}
+💡 תאורה: ${lighting}
+📸 זווית: ${angle}
+🧩 קומפוזיציה: ${composition}
+📏 גודל: ${dimensions}
+🖼 יחס/איכות: ${ratio}
+📝 תיאור נוסף: ${extra}`;
+                document.getElementById('resultPrompt').innerText = result;
+                spinner.style.display = 'none';
+            }, 500);
+        }
+
+        function copyPrompt() {
+            const text = document.getElementById('resultPrompt').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.btn-outline-success');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> הועתק!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        function savePrompt() {
+            const prompt = document.getElementById('resultPrompt').innerText;
+            if (!prompt) return;
+
+            let savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+            savedPrompts.push({
+                text: prompt,
+                date: new Date().toLocaleDateString('he-IL')
+            });
+            localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
+            updateSavedPromptsList();
+        }
+
+        function updateSavedPromptsList() {
+            const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+            const container = document.getElementById('savedPromptsList');
+            container.innerHTML = '';
+
+            savedPrompts.reverse().forEach((prompt, index) => {
+                const div = document.createElement('div');
+                div.className = 'saved-prompt-item';
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="category-badge">${prompt.date}</span>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deletePrompt(${index})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2">${prompt.text}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deletePrompt(index) {
+            let savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+            savedPrompts.splice(index, 1);
+            localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
+            updateSavedPromptsList();
+        }
+
+        // טעינת פרומפטים שמורים בטעינת העמוד
+        document.addEventListener('DOMContentLoaded', updateSavedPromptsList);
+    </script>
+</body>
+
+</html>

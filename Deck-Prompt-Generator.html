@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗂️ מחולל סדרות קלפים</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            direction: rtl;
+            background-color: #f2f2f8;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .output-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body class="container py-5">
+    <h1 class="text-center mb-4">🗂️ מחולל סדרות קלפים – גרסה משודרגת ומורחבת</h1>
+
+    <form class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">שם הסדרה</label>
+            <input type="text" class="form-control" id="deckName" placeholder="לדוגמה: שערי תודעה">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">נושא הסדרה</label>
+            <select class="form-select" id="seriesTheme">
+                <option>ארבעת היסודות</option>
+                <option>עשר הספירות</option>
+                <option>שבע מידות הלב</option>
+                <option>שמות קודש</option>
+                <option>שערי תודעה</option>
+                <option>שיעורי חיים</option>
+                <option>תכונות נפש</option>
+                <option>שערי קבלה</option>
+                <option>עולמות הבריאה</option>
+                <option>מסע הנשמה</option>
+                <option>צירופי שמות</option>
+                <option>יסודות הזמן והמקום</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">מספר קלפים</label>
+            <input type="number" class="form-control" id="cardCount" placeholder="למשל: 10, 22, 40, 72">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">סוג חלוקה</label>
+            <select class="form-select" id="grouping">
+                <option>לפי יסודות</option>
+                <option>לפי ספירות</option>
+                <option>לפי צבעים</option>
+                <option>לפי עולמות</option>
+                <option>לפי שערים</option>
+                <option>לפי כוונות</option>
+                <option>לפי אותיות</option>
+                <option>ללא חלוקה</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">סדר הצגה</label>
+            <select class="form-select" id="orderLogic">
+                <option>מכתר למלכות</option>
+                <option>מאש לעפר</option>
+                <option>לפי אותיות</option>
+                <option>לפי תדרים</option>
+                <option>לפי עולמות</option>
+                <option>אקראי מאוזן</option>
+                <option>מתפתח הדרגתי</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">סגנון גרפי</label>
+            <select class="form-select" id="graphicStyle">
+                <option>פשוט ונקי</option>
+                <option>הולוגרפי מיסטי</option>
+                <option>טארוט עתיק</option>
+                <option>פנטזיה צבעונית</option>
+                <option>תודעה זוהרת</option>
+                <option>קלפים אנרגטיים</option>
+                <option>מנדלות ופרחי חיים</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">אלמנטים קבועים בכל קלף</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el1" value="כותרת"></div>
+            <label class="form-check-label" for="el1">כותרת</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el2" value="תיאור קצר"></div>
+            <label class="form-check-label" for="el2">תיאור קצר</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el3" value="מילת מפתח באנגלית">
+            </div>
+            <label class="form-check-label" for="el3">מילת מפתח באנגלית</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el4" value="פסוק מהתנ" ך"></div>
+            <label class="form-check-label" for="el4">פסוק מהתנ"ך</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el5" value="תכונה רגשית"></div>
+            <label class="form-check-label" for="el5">תכונה רגשית</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el6" value="שאלת התבוננות">
+            </div>
+            <label class="form-check-label" for="el6">שאלת התבוננות</label><br>
+            <div class="form-check"><input type="checkbox" class="form-check-input" id="el7" value="הנחיה מעשית"></div>
+            <label class="form-check-label" for="el7">הנחיה מעשית</label><br>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">הערות / חוקים מיוחדים</label>
+            <textarea class="form-control" id="specialNotes" rows="6"
+                placeholder="לדוגמה: כל קלף מכיל גוון אחד מתוך 4 גוונים פנימיים, אייקון קבוע לפי יסוד, ושכבת אור שקופה. יש לשלב פסוק אחד מהתנ"
+                ך ותכונה פנימית."></textarea>
+        </div>
+
+        <div class="col-12 text-center">
+            <button class="btn btn-primary mt-3 px-5" type="button" onclick="generateDeckPrompt()">⚡ צור פרומפט</button>
+        </div>
+    </form>
+
+    <div class="mt-5">
+        <h4 class="text-center">📄 פרומפט שנוצר</h4>
+        <div id="deckPrompt" class="output-box"></div>
+        <div class="text-center mt-3">
+            <button class="btn btn-outline-success" onclick="copyDeckPrompt()">📋 העתק פרומפט</button>
+        </div>
+    </div>
+
+    <script>
+        function generateDeckPrompt() {
+            const name = document.getElementById('deckName').value;
+            const theme = document.getElementById('seriesTheme').value;
+            const count = document.getElementById('cardCount').value;
+            const group = document.getElementById('grouping').value;
+            const order = document.getElementById('orderLogic').value;
+            const style = document.getElementById('graphicStyle').value;
+            const notes = document.getElementById('specialNotes').value;
+
+            const elements = ["el1", "el2", "el3", "el4", "el5", "el6", "el7"]
+                .map(id => document.getElementById(id))
+                .filter(el => el.checked)
+                .map(el => el.value)
+                .join(", ");
+
+            const result = `🗂️ Deck Name: ${name}
+🎯 Theme: ${theme}
+🧮 Cards: ${count}
+🔗 Grouped by: ${group}
+📏 Order: ${order}
+🎨 Style: ${style}
+🧩 Elements per card: ${elements}
+📘 Notes: ${notes}`;
+
+            document.getElementById('deckPrompt').innerText = result;
+        }
+
+        function copyDeckPrompt() {
+            const text = document.getElementById('deckPrompt').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✅ הפרומפט הועתק!");
+            });
+        }
+    </script>
+</body>
+
+</html>

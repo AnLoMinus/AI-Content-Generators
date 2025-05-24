@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 מחולל דמויות</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            direction: rtl;
+            background: linear-gradient(135deg, #f4f4f9 0%, #e8e8f0 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+        }
+
+        .prompt-box {
+            white-space: pre-line;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 15px;
+            border: 3px solid #ddd;
+            transition: transform 0.3s ease;
+        }
+
+        .color-preview:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #4a90e2;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+        }
+
+        .character-preview {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .preview-title {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .preview-content {
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+        }
+
+        .tooltip-icon {
+            color: #4a90e2;
+            margin-right: 5px;
+            cursor: help;
+        }
+
+        .character-type-badge {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-home"></i> חזרה לדף הבית
+            </a>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h1 class="text-center mb-4">🎭 מחולל דמויות</h1>
+        <p class="text-center text-muted mb-5">צור דמויות מורכבות עם מאפיינים ייחודיים, כוחות, ואנרגיות</p>
+
+        <form id="characterForm" class="row g-3">
+            <!-- פרטי בסיס -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-user"></i>
+                    פרטי בסיס
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-tag tooltip-icon" title="השם שיופיע על הדמות"></i>
+                            שם הדמות
+                        </label>
+                        <input type="text" class="form-control" id="characterName" placeholder="לדוגמה: אוריאל המלאך">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-user-tag tooltip-icon"
+                                title="סוג הדמות יקבע את המאפיינים הבסיסיים שלה"></i>
+                            סוג דמות
+                        </label>
+                        <select class="form-select" id="characterType">
+                            <option>מלאך</option>
+                            <option>נביא</option>
+                            <option>צדיק</option>
+                            <option>מלך</option>
+                            <option>חכם</option>
+                            <option>משורר</option>
+                            <option>מנהיג</option>
+                            <option>מיסטיקן</option>
+                            <option>מגן</option>
+                            <option>מרפא</option>
+                            <option>מורה</option>
+                            <option>מגלה</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- תיאור ומאפיינים -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-scroll"></i>
+                    תיאור ומאפיינים
+                </h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-align-left tooltip-icon"
+                                title="תאר את הדמות, תכונותיה, ומאפייניה הייחודיים"></i>
+                            תיאור הדמות
+                        </label>
+                        <textarea class="form-control" id="characterDescription" rows="3"
+                            placeholder="תאר את הדמות, תכונותיה, ומאפייניה הייחודיים"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-bolt tooltip-icon" title="הכוח המרכזי של הדמות"></i>
+                            כוח מרכזי
+                        </label>
+                        <select class="form-select" id="mainPower">
+                            <option>חכמה</option>
+                            <option>נבואה</option>
+                            <option>ריפוי</option>
+                            <option>הגנה</option>
+                            <option>הארה</option>
+                            <option>הנהגה</option>
+                            <option>קסם</option>
+                            <option>תפילה</option>
+                            <option>ריפוי נפשי</option>
+                            <option>הגנה רוחנית</option>
+                            <option>הארת דרך</option>
+                            <option>חוכמת חיים</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-battery-full tooltip-icon" title="רמת האנרגיה של הדמות"></i>
+                            רמת אנרגיה
+                        </label>
+                        <select class="form-select" id="energyLevel">
+                            <option>נמוכה (1-3)</option>
+                            <option>בינונית (4-6)</option>
+                            <option>גבוהה (7-9)</option>
+                            <option>עליונה (10)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- אלמנטים גרפיים -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-palette"></i>
+                    אלמנטים גרפיים
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-icons tooltip-icon" title="סמל או אייקון שייצג את הדמות"></i>
+                            סמל / אייקון
+                        </label>
+                        <input type="text" class="form-control" id="characterIcon"
+                            placeholder="לדוגמה: מגן דוד, מנורה, כתר">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-fill-drip tooltip-icon" title="הצבע המרכזי של הדמות"></i>
+                            צבע מרכזי
+                        </label>
+                        <div class="d-flex align-items-center">
+                            <div class="color-preview" id="colorPreview"></div>
+                            <input type="color" class="form-control form-control-color" id="mainColor" value="#4a90e2">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-magic tooltip-icon" title="אפקטים חזותיים שיתווספו לדמות"></i>
+                            אפקטים חזותיים
+                        </label>
+                        <select class="form-select" id="visualEffects">
+                            <option>הילה זוהרת</option>
+                            <option>קרני אור</option>
+                            <option>אבקת קסם</option>
+                            <option>להבות קדושה</option>
+                            <option>ענני כבוד</option>
+                            <option>קווים מתפזרים</option>
+                            <option>הילה רוחנית</option>
+                            <option>קרני חכמה</option>
+                            <option>אבקת הארה</option>
+                            <option>להבות אמת</option>
+                            <option>ללא אפקטים</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- שילוב בסדרות -->
+            <div class="col-12 form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-link"></i>
+                    שילוב בסדרות
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-layer-group tooltip-icon" title="סדרת הקלפים אליה שייכת הדמות"></i>
+                            סדרת קלפים
+                        </label>
+                        <select class="form-select" id="cardSeries">
+                            <option>שבעים פנים לתורה</option>
+                            <option>שערי תודעה</option>
+                            <option>עשר הספירות</option>
+                            <option>ארבעת היסודות</option>
+                            <option>שבע מידות הלב</option>
+                            <option>שנים עשר השבטים</option>
+                            <option>עשרת הדברות</option>
+                            <option>שבעת המינים</option>
+                            <option>ללא סדרה</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-book-open tooltip-icon" title="הסיפור העלילתי אליו שייכת הדמות"></i>
+                            סיפור עלילתי
+                        </label>
+                        <input type="text" class="form-control" id="storyArc"
+                            placeholder="לדוגמה: מסע הגאולה, שערי החכמה">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 text-center mt-4">
+                <button type="button" class="btn btn-primary px-5" onclick="generateCharacterPrompt()">
+                    <i class="fas fa-magic"></i> צור פרומפט
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-5">
+            <h4 class="text-center mb-4">
+                <i class="fas fa-scroll"></i>
+                פרומפט שנוצר
+            </h4>
+            <div id="characterPrompt" class="prompt-box"></div>
+            <div class="text-center mt-3">
+                <button class="btn btn-outline-success" onclick="copyCharacterPrompt()">
+                    <i class="fas fa-copy"></i> העתק פרומפט
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // עדכון תצוגה מקדימה של הצבע
+        document.getElementById('mainColor').addEventListener('input', function (e) {
+            document.getElementById('colorPreview').style.backgroundColor = e.target.value;
+        });
+
+        // אתחול תצוגה מקדימה של הצבע
+        document.getElementById('colorPreview').style.backgroundColor = document.getElementById('mainColor').value;
+
+        function generateCharacterPrompt() {
+            const name = document.getElementById('characterName').value;
+            const type = document.getElementById('characterType').value;
+            const desc = document.getElementById('characterDescription').value;
+            const power = document.getElementById('mainPower').value;
+            const energy = document.getElementById('energyLevel').value;
+            const icon = document.getElementById('characterIcon').value;
+            const color = document.getElementById('mainColor').value;
+            const effects = document.getElementById('visualEffects').value;
+            const series = document.getElementById('cardSeries').value;
+            const story = document.getElementById('storyArc').value;
+
+            const result = `🎭 Character: ${name}
+👤 Type: ${type}
+📝 Description: ${desc}
+⚡ Power: ${power}
+🔋 Energy: ${energy}
+🎨 Visual Elements:
+   - Icon: ${icon}
+   - Color: ${color}
+   - Effects: ${effects}
+🔄 Integration:
+   - Card Series: ${series}
+   - Story Arc: ${story}`;
+
+            document.getElementById('characterPrompt').innerText = result;
+        }
+
+        function copyCharacterPrompt() {
+            const text = document.getElementById('characterPrompt').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✅ הפרומפט הועתק!");
+            });
+        }
+
+        // הוספת טולטיפים
+        const tooltips = document.querySelectorAll('.tooltip-icon');
+        tooltips.forEach(tooltip => {
+            tooltip.addEventListener('mouseover', function () {
+                const title = this.getAttribute('title');
+                const tooltipEl = document.createElement('div');
+                tooltipEl.className = 'tooltip';
+                tooltipEl.textContent = title;
+                document.body.appendChild(tooltipEl);
+
+                const rect = this.getBoundingClientRect();
+                tooltipEl.style.top = rect.top - tooltipEl.offsetHeight - 5 + 'px';
+                tooltipEl.style.left = rect.left + (rect.width / 2) - (tooltipEl.offsetWidth / 2) + 'px';
+            });
+
+            tooltip.addEventListener('mouseout', function () {
+                const tooltips = document.querySelectorAll('.tooltip');
+                tooltips.forEach(t => t.remove());
+            });
+        });
+    </script>
+</body>
+
+</html>
