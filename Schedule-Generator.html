@@ -643,85 +643,8 @@
         </div>
     </div>
 
-    <script>
-        function generateSchedule() {
-            const name = document.getElementById('studentName').value;
-            const level = document.getElementById('educationLevel').value;
-
-            // איסוף ימים ושעות נבחרים
-            const days = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(cb => cb.value);
-            const hours = Array.from(document.querySelectorAll('input[name="hours"]:checked')).map(cb => cb.value)[0] || '';
-
-            // איסוף נושאים נבחרים
-            const subjects = Array.from(document.querySelectorAll('input[name="subjects"]:checked')).map(cb => cb.value);
-            const favorites = Array.from(document.querySelectorAll('input[name="favorites"]:checked')).map(cb => cb.value);
-            const challenging = Array.from(document.querySelectorAll('input[name="challenging"]:checked')).map(cb => cb.value);
-
-            // איסוף הפסקות נבחרות
-            const shortBreaks = Array.from(document.querySelectorAll('input[name="shortBreaks"]:checked')).map(cb => cb.value)[0] || '';
-            const longBreaks = Array.from(document.querySelectorAll('input[name="longBreaks"]:checked')).map(cb => cb.value)[0] || '';
-
-            // איסוף מטרות ויעדים נבחרים
-            const goals = Array.from(document.querySelectorAll('input[name="goals"]:checked')).map(cb => cb.value);
-            const exams = Array.from(document.querySelectorAll('input[name="exams"]:checked')).map(cb => cb.value);
-            const tasks = Array.from(document.querySelectorAll('input[name="tasks"]:checked')).map(cb => cb.value);
-
-            const result = `📚 מערכת שעות לימודית: ${name}
-🎓 רמת לימודים: ${level}
-
-📅 ימי לימוד: ${days.join(', ')}
-⏰ שעות לימוד: ${hours}
-
-📖 נושאי לימוד:
-${subjects.map(subject => `   - ${subject}`).join('\n')}
-
-⭐ נושאים מועדפים: ${favorites.join(', ')}
-⚠️ נושאים מאתגרים: ${challenging.join(', ')}
-
-☕ הפסקות:
-   - הפסקות קצרות: ${shortBreaks}
-   - הפסקות ארוכות: ${longBreaks}
-
-🎯 מטרות ויעדים:
-${goals.map(goal => `   - ${goal}`).join('\n')}
-
-📝 מועדי מבחנים:
-${exams.map(exam => `   - ${exam}`).join('\n')}
-
-📋 משימות מיוחדות:
-${tasks.map(task => `   - ${task}`).join('\n')}`;
-
-            document.getElementById('schedule').innerText = result;
-        }
-
-        function copySchedule() {
-            const text = document.getElementById('schedule').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("✅ התוכן הועתק בהצלחה!");
-            });
-        }
-
-        // הוספת טולטיפים
-        const tooltips = document.querySelectorAll('.tooltip-icon');
-        tooltips.forEach(tooltip => {
-            tooltip.addEventListener('mouseover', function () {
-                const title = this.getAttribute('title');
-                const tooltipEl = document.createElement('div');
-                tooltipEl.className = 'tooltip';
-                tooltipEl.textContent = title;
-                document.body.appendChild(tooltipEl);
-
-                const rect = this.getBoundingClientRect();
-                tooltipEl.style.top = rect.top - tooltipEl.offsetHeight - 5 + 'px';
-                tooltipEl.style.left = rect.left + (rect.width / 2) - (tooltipEl.offsetWidth / 2) + 'px';
-            });
-
-            tooltip.addEventListener('mouseout', function () {
-                const tooltips = document.querySelectorAll('.tooltip');
-                tooltips.forEach(t => t.remove());
-            });
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/common.js"></script>
 </body>
 
 </html>
